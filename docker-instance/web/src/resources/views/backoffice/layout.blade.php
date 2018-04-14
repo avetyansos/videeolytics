@@ -48,7 +48,11 @@
                     START - User avatar and menu in secondary top menu
                     -------------------->
                     <div class="logged-user-w">
-                        @include('backoffice._includes.profile')
+                        <div class="logged-user-i">
+                            <button class="btn btn-light" data-href="{{ route('logout') }}" data-method="post" data-confirm="Are you sure to logout?">
+                                <i class="os-icon os-icon-signs-11"></i><span class="ml-2">Logout</span>
+                            </button>
+                        </div>
                     </div>
                     <!--------------------
                     END - User avatar and menu in secondary top menu
@@ -60,14 +64,6 @@
             </div>
             <!--------------------
             END - Top Bar
-            -------------------->
-
-            <!--------------------
-            START - Breadcrumbs
-            -------------------->
-            @include('backoffice._includes.breadcrumb')
-            <!--------------------
-            END - Breadcrumbs
             -------------------->
 
             <div class="content-i">
@@ -86,7 +82,6 @@
                     END - Sidebar
                     -------------------->
                 @endif
-
 
             </div>
         </div>

@@ -44,10 +44,10 @@ class Analytics extends Model
     }
 
     public function setStartTimeAttribute($data) {
-        if (strlen($data) > 10) {
-            $data /= 1000;
+        if (ctype_digit($data) && strlen($data) > 10) {
+            $data = (int) ($data/1000);
         }
-        $data = $this->fromDateTime((int)$data);
+        $data = $this->fromDateTime($data);
         $this->attributes['startTime'] = $data;
 
         return $this;

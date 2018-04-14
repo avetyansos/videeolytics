@@ -17,12 +17,10 @@
 <body class="auth-wrapper">
 <div class="all-wrapper menu-side with-pattern">
     <div class="auth-box-w">
-        <div class="logo-w">
-            <a href="{{ route('home') }}"><img alt="" src=" {{ asset('img/logo-big.png') }}"></a>
+        <div class="logo-w p-3">
+            <a href="{{ route('home') }}"><img style="width: 50%; margin-left: -15px;" src="{{ asset('img/logo-big.png') }}"></a>
         </div>
-        <h4 class="auth-header">
-            Login Form
-        </h4>
+        <h4 class="auth-header">Sign in to Backoffice</h4>
         <form method="post" action="{{ route('login') }}" class="form-signin">
             {{ csrf_field() }}
             <div class="form-group {{ $errors->has('email') ? ' has-danger' : '' }}">
