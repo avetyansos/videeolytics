@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+    mysql:
+        container_name: mysql
+        build:
+            context: ./docker-instance/mysql
+        # restart: always
+        restart: on-failure
+        env_file:
+            - "./docker-instance/mysql/docker-helper/.env"
+        environment:
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        ports:
+            - "33060:3306"
+        volumes:
+            - "./data/db/mysql:/var/lib/mysql" # will be good to have separate mount for data
+        networks:
+            - web-network
+
+    web:
+        container_name: web
+        build:
+            context: ./docker-instance/web
+        restart: always
+        ports:
+            - "8080:80"
+            - "4430:443"
+            - "9001:9000"
+        depends_on:
+            - mysql
+        networks:
+            - web-network
+
+networks:
+    web-network:
+        driver: bridge

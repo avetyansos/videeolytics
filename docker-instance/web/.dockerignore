@@ -1,0 +1,6 @@
+src/.idea
+src/node_modules
+src/storage/app/*/*
+src/storage/framework/*/*
+src/storage/logs/*
+src/vendor
