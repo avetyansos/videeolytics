@@ -27,7 +27,7 @@
             <div class="element-wrapper">
                 <h6 class="element-header">Video details</h6>
                 <div class="element-box">
-                    <div class="d-flex justify-content-between align-items-center">Current event: <strong id="current-event" class="badge badge-success ml-2"></strong></div>
+                    <div class="d-flex justify-content-between align-items-center"><span class="badge badge-success">Current event</span> <strong id="current-event" class="badge badge-light ml-2"></strong></div>
                 </div>
                 <div class="element-box" style="max-height: 500px; overflow-y: scroll;">
                     @if ($model->events !== false)

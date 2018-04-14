@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Analytics;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class AnalyticsController extends Controller
 
         $rules = [
             'sessionId' => ['bail', 'required', 'string', 'min:8', 'max:128', Rule::unique('analytics')->ignore($id)],
-            'userIdentifier' => ['bail', 'nullable','string', 'min:3', 'max:255'],
+            'userIdentifier' => ['bail', 'nullable','string', 'max:255'],
             'startTime' => [
                 'bail',
                 'required',
@@ -39,18 +40,24 @@ class AnalyticsController extends Controller
             'deviceInfo.platform' => ['bail', 'required', 'string', 'in:ios,android'],
             'deviceInfo.osVersion' => ['bail', 'required', 'string'],
 
-
-            // TODO check if video.mp4 and events.json files are exists in CDN
             'video' => [
-                function($attribute, $value, $fail) {
-                    $message = 'File video.mp4 can not be found for sessionId.';
-                    //return $message ? $fail($message) : null;
+                function($attribute, $value, $fail) use ($data) {
+                    $message = null;
+                    $path = str_finish(env('CDN_HOST'), '/') . ($data['sessionId'] ?? '_') . '/video.mp4';
+                    if (!Helper::isUriExists($path)) {
+                        $message = 'File video.mp4 can not be found for sessionId.';
+                    }
+                    return $message ? $fail($message) : null;
                 },
             ],
             'events' => [
-                function($attribute, $value, $fail) {
-                    $message = 'File events.json can not be found for sessionId.';
-                    //return $message ? $fail($message) : null;
+                function($attribute, $value, $fail) use ($data) {
+                    $message = null;
+                    $path = str_finish(env('CDN_HOST'), '/') . ($data['sessionId'] ?? '_') . '/events.json';
+                    if (!Helper::isUriExists($path)) {
+                        $message = 'File events.json can not be found for sessionId.';
+                    }
+                    return $message ? $fail($message) : null;
                 },
             ],
 
