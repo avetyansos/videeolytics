@@ -23,7 +23,7 @@ RUN apt-get update \
     && apt-get install --no-install-recommends --no-install-suggests -q -y curl \
     && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
     && apt-get update \
-    && apt-get install --no-install-recommends --no-install-suggests -q -y nodejs
+    && apt-get install --no-install-recommends --no-install-suggests -q -y nodejs libpng-dev
 
 ## Install ffmpeg
 RUN apt-get update \
