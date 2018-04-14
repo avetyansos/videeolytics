@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Components\DB\Model;
+use App\Helpers\Helper;
 
 class Analytics extends Model
 {
@@ -52,4 +53,26 @@ class Analytics extends Model
 
         return $this;
     }
+
+    public function getVideoAttribute() {
+        if (!isset($this->attributes['video'])) {
+            $path = str_finish(env('CDN_HOST'), '/') . $this->sessionId . '/video.mp4';
+            $this->attributes['video'] = (Helper::isUriExists($path) ? $path : false);
+        }
+        return $this->attributes['video'];
+    }
+
+    public function getEventsAttribute() {
+        if (!isset($this->attributes['events'])) {
+            $path = str_finish(env('CDN_HOST'), '/') . $this->sessionId . '/events.json';
+            if (!Helper::isUriExists($path)) {
+                $this->attributes['events'] = false;
+            } else {
+                $data = $this->fromJson(file_get_contents($path) ?? '');
+                $this->attributes['events'] = ($data ? $data : []);
+            }
+        }
+        return $this->attributes['events'];
+    }
+
 }

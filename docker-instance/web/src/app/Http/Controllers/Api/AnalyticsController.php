@@ -14,8 +14,8 @@ class AnalyticsController extends Controller
         $id = $data['id'] ?? null;
 
         $rules = [
-            'sessionId' => ['bail', 'required', 'string', 'min:32', 'max:128', Rule::unique('analytics')->ignore($id)],
-            'userIdentifier' => ['bail', 'required', 'string', 'min:3', 'max:255'],
+            'sessionId' => ['bail', 'required', 'string', 'min:8', 'max:128', Rule::unique('analytics')->ignore($id)],
+            'userIdentifier' => ['bail', 'nullable','string', 'min:3', 'max:255'],
             'startTime' => [
                 'bail',
                 'required',
@@ -95,7 +95,5 @@ class AnalyticsController extends Controller
                 'errors' => $validator->errors()
             ], 400);
         }
-
-
     }
 }

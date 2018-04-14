@@ -37,7 +37,7 @@ Route::group([
 
     Route::resource('analytics', 'AnalyticsController')->names([
         'index' => 'backoffice.analytics',
-        'create' => 'backoffice.analytics.show',
+        'show' => 'backoffice.analytics.show',
         'destroy' => 'backoffice.analytics.delete',
     ]);
 

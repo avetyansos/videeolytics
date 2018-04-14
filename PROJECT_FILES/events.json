@@ -1,0 +1,22 @@
+[
+    {
+        "time": 0,
+        "type": "view",
+        "name": "Homepage"
+    },
+    {
+        "time": 1830,
+        "type": "view",
+        "name": "Branches list"
+    },
+    {
+        "time": 3229,
+        "type": "view",
+        "name": "Branche view"
+    },
+    {
+        "time": 4511,
+        "type": "view",
+        "name": "Parment view"
+    }
+]

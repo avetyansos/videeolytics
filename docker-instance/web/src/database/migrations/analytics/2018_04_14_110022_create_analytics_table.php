@@ -16,7 +16,7 @@ class CreateAnalyticsTable extends Migration
         Schema::create('analytics', function (Blueprint $table) {
             $table->increments('id');
             $table->string('sessionId', 128)->unique();
-            $table->string('userIdentifier');
+            $table->string('userIdentifier')->nullable();
             $table->timestamp('startTime');
             $table->integer('duration');
 
