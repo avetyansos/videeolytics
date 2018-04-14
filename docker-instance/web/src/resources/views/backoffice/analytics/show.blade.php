@@ -77,20 +77,28 @@
 @section('custom-js')
     <script type="text/javascript">
         $(function (e) {
-            const events = {!! $model->events ? json_encode($model->events) : '[]' !!};
-
+            let events = {!! $model->events ? json_encode($model->events) : '[]' !!};
+            events = events.map(function(item) {
+                item.time /= 1000;
+                return item;
+            });
             const $video = $('#video');
             const $textBlock = $('#current-event');
+            let index = 0;
+            let lastTime = 0;
             $video.on("timeupdate", function(event) {
-                for (let i=0; i < events.length; i++) {
-                    if (this.currentTime >= events[i].time || 0) {
-                        $textBlock.html(events[i].name || '');
+                if (this.currentTime < lastTime) {
+                    index = 0;
+                }
+                lastTime = this.currentTime;
+                for (let i=index; i < events.length; i++) {
+                    if (this.currentTime >= events[i].time) {
+                        //console.log(this.currentTime , events[i].time, i);
+                        $textBlock.html(events[i].name);
+                        ++index;
                         break;
                     }
-                    //console.log(this.currentTime, Date.now(), this.duration);
-                    console.log(this.currentTime , events[i].time);
                 }
-
             })
         })
     </script>

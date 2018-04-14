@@ -25,9 +25,7 @@ Route::post('/logout', 'AuthController@logout')->name('logout');
 Route::group([
     'prefix' => 'backoffice',
     'namespace' => 'Backoffice',
-//    'middleware' => [
-//
-//    ]
+    'middleware' => ['auth']
 ], function() {
     Route::get('/test', 'MainController@test'); // TEST action
 

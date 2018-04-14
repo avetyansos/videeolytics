@@ -31,6 +31,16 @@ class Analytics extends Model
         'updated_at',
     ];
 
+    public static function boot() {
+        parent::boot();
+
+        self::deleted(function($model) {
+            /** @var self $model */
+
+            // TODO remove video and events files from CDN (s3) using sessionId and SDK https://aws.amazon.com/sdk-for-php/
+        });
+    }
+
     public function setDeviceInfoAttribute($data) {
         if (is_array($data)) {
             foreach ($data as $attr => $val) {
@@ -38,9 +48,7 @@ class Analytics extends Model
                     $this->attributes[$attr] = $val;
                 }
             }
-
         }
-
         return $this;
     }
 
@@ -50,7 +58,6 @@ class Analytics extends Model
         }
         $data = $this->fromDateTime($data);
         $this->attributes['startTime'] = $data;
-
         return $this;
     }
 

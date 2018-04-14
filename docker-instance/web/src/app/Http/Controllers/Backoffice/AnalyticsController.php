@@ -43,7 +43,8 @@ class AnalyticsController extends Controller
             ])
             ->setActionColumn([
                 'wrapper' => function ($value, $row) {
-                    return '<a href="' . route('backoffice.analytics.show', ['id' => $row->id]) . '" class="btn btn-primary">Show</a>';
+                    return '<a href="' . route('backoffice.analytics.show', ['id' => $row->id]) . '" class="btn btn-primary">Show</a>'
+                        . '<button type="button" data-method="delete" data-href="' . route('backoffice.analytics.delete', ['id' => $row->id]) . '" class="btn btn-danger ml-2" data-confirm="Are you sure to delete analytics data?">Delete</button>';
                 }
             ]);
 
@@ -59,6 +60,27 @@ class AnalyticsController extends Controller
         return view('backoffice.analytics.show', [
             'model' => $model,
         ]);
+    }
+
+    public function destroy(Request $request, $id) {
+        if (!$request->isXmlHttpRequest()) {
+            abort(400, 'Do not repeat this request again');
+        }
+
+        $model = Analytics::findOrFail($id);
+
+        if ($model->delete()) {
+            return response()->json([
+                'status' => 'success',
+                'redirect' => route('backoffice.analytics'),
+                'message' => 'Analytics data deleted successfully.'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Analytics data deletion failed.'
+            ]);
+        }
     }
 
 }
