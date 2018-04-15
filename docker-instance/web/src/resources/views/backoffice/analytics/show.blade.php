@@ -9,7 +9,7 @@
                 <h6 class="element-header">Video (Session Id: {{ $model->sessionId }})</h6>
                 <div class="element-box text-center">
                     @if ($model->video)
-                        <video id="video" controls>
+                        <video id="video" style="min-width: 280px;" controls>
                             <source src="{{ $model->video }}" type="video/mp4">
                         </video>
                     @else
