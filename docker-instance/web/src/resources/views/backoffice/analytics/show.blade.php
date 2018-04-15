@@ -35,7 +35,7 @@
                         @forelse($model->events as $event)
                             <li class="d-flex justify-content-between align-items-center pb-1 mb-1 border-bottom">
                                 {{ $event['name'] ?? '' }}
-                                <span class="badge badge-primary ml-2">{{ $event['type'] ?? '' }} ({{ floor(($event['time'] ?? 0) / 60000) }}:{{ floor(($event['time'] ?? 0) / 1000) }})</span>
+                                <span class="badge badge-primary ml-2">{{ $event['type'] ?? '' }} ({{ floor(($event['timestamp'] ?? 0) / 60000) }}:{{ floor(($event['timestamp'] ?? 0) / 1000) }})</span>
                             </li>
                         @empty
                             <li class="alert alert-warning">Events data not exists or incorrect</li>
@@ -79,7 +79,7 @@
         $(function (e) {
             let events = {!! $model->events ? json_encode($model->events) : '[]' !!};
             events = events.map(function(item) {
-                item.time /= 1000;
+                item.timestamp /= 1000;
                 return item;
             });
             const $video = $('#video');
@@ -92,8 +92,8 @@
                 }
                 lastTime = this.currentTime;
                 for (let i=index; i < events.length; i++) {
-                    if (this.currentTime >= events[i].time) {
-                        //console.log(this.currentTime , events[i].time, i);
+                    if (this.currentTime >= events[i].timestamp) {
+                        //console.log(this.currentTime , events[i].timestamp, i);
                         $textBlock.html(events[i].name);
                         ++index;
                         break;
