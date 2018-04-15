@@ -7,7 +7,7 @@
         <div class="col-lg-12">
             <div class="element-wrapper">
                 <h6 class="element-header">Video (Session Id: {{ $model->sessionId }})</h6>
-                <div class="element-box">
+                <div class="element-box text-center">
                     @if ($model->video)
                         <video id="video" width="100%" controls>
                             <source src="{{ $model->video }}" type="video/mp4">

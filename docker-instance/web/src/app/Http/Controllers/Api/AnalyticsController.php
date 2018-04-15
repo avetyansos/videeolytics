@@ -61,7 +61,7 @@ class AnalyticsController extends Controller
                 },
             ],
 
-            'crash' => ['array'],
+            'crash' => ['nullable', 'array'],
         ];
 
         $rules = array_merge($rules, $extraRules);
