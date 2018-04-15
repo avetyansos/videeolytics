@@ -26609,3 +26609,37 @@ Contents:
 }
 
 /* ##. User Override Styles */
+.empty-select,
+.empty-select:focus {
+  color: #a0a0a0;
+}
+
+.empty-select option,
+.empty-select:focus option {
+  color: #494949;
+}
+
+.form-group .form-control.filter-helper-exp {
+  width: 2.4rem;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  border-right: 0;
+  font-weight: bold;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+       appearance: none;
+}
+
+.form-group .form-control.filter-helper-source, .form-group .form-control.filter-helper-max {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.form-group .form-control.filter-helper-min {
+  width: 8rem;
+  border-radius: 0;
+}
+
+.form-group .form-control.filter-helper-max {
+  width: 8rem;
+}

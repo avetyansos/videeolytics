@@ -470,6 +470,137 @@ $(function () {
             });
 
             return $items;
+        },
+
+        filterHelper: function filterHelper(command, options, timeout) {
+            var $fields = $(this);
+            timeout = timeout || 0;
+            command = command || 'init';
+            var defaults = {
+                namePrefix: 'h_',
+                parentSelector: null, //'.form-group',
+                sourceClass: 'filter-helper-source',
+                expClass: 'filter-helper-exp',
+                minClass: 'filter-helper-min',
+                maxClass: 'filter-helper-max',
+                additionalClass: 'form-control form-control-sm bright',
+                toggleDuration: 0,
+                toggleEffect: null,
+                onInit: null,
+                expValue: '',
+                minValue: '',
+                maxValue: ''
+            };
+            options = $.extend({}, defaults, options);
+            var toggleOptions = options.toggleEffect ? {
+                duration: options.toggleDuration,
+                easing: options.toggleEffect
+            } : options.toggleDuration;
+
+            var commands = {
+                init: function init() {
+
+                    var expOptions = '<option value="">=</option>' + '<option value="<>">!=</option>' + '<option value=">=">>=</option>' + '<option value="<="><=</option>' + '<option value="range"><-></option>';
+
+                    setTimeout(function () {
+                        $fields.each(function () {
+                            var $self = $(this);
+                            if ($self.data('filter-helper')) {
+                                return;
+                            }
+                            var name = options.namePrefix + $self.attr('name');
+                            var $exp = $('<select />', {
+                                class: options.additionalClass + ' ' + options.expClass,
+                                name: name + '[exp]',
+                                change: function change() {
+                                    commands.toggleRange($(this));
+                                }
+                            }).data('filter', $self).append(expOptions);
+                            var $min = $('<input>', {
+                                type: 'text',
+                                class: options.additionalClass + ' ' + options.minClass,
+                                name: name + '[min]',
+                                style: 'display: none',
+                                placeholder: 'from',
+                                value: options.minValue === true ? window.location.search.getQueryParam(name + '[min]') : options.minValue
+                            });
+                            var $max = $('<input>', {
+                                type: 'text',
+                                class: options.additionalClass + ' ' + options.maxClass,
+                                name: name + '[max]',
+                                style: 'display: none',
+                                placeholder: 'to',
+                                value: options.maxValue === true ? window.location.search.getQueryParam(name + '[max]') : options.maxValue
+                            });
+                            if ($self.data('type') === 'date') {
+                                $self.localDatePicker();
+                                $min.localDatePicker();
+                                $max.localDatePicker();
+                            }
+                            $self.before($exp).after($max).after($min).data('filter-helper', {
+                                $exp: $exp,
+                                $min: $min,
+                                $max: $max
+                            }).addClass(options.sourceClass);
+
+                            $exp.val(options.expValue === true ? window.location.search.getQueryParam($exp.attr('name')) : options.expValue);
+                            $exp.closest('form').on('reset', function () {
+                                setTimeout(function () {
+                                    commands.toggleRange($exp);
+                                }, 100);
+                            });
+                            commands.toggleRange($exp);
+
+                            if (typeof options.onInit === 'function') {
+                                options.onInit($self);
+                            }
+                        });
+                    }, timeout);
+                },
+
+                destroy: function destroy() {
+                    setTimeout(function () {
+                        $fields.each(function () {
+                            var $self = $(this);
+                            if ($self.data('filter-helper')) {
+                                var $ps = options.parentSelector ? $self.closest(options.parentSelector) : $self.parent();
+                                $ps.find('.' + options.expClass).remove();
+                                $ps.find('.' + options.minClass).remove();
+                                $ps.find('.' + options.maxClass).remove();
+                                $self.removeClass(options.sourceClass).data('filter-helper', false).show();
+                            }
+                        });
+                    }, timeout);
+                },
+
+                toggleRange: function toggleRange($exp) {
+                    var $ps = options.parentSelector ? $exp.closest(options.parentSelector) : $exp.parent();
+                    if ($exp.val() === 'range') {
+                        $ps.find('.' + options.minClass).show(toggleOptions);
+                        $ps.find('.' + options.maxClass).show(toggleOptions);
+                        $exp.data('filter').hide(toggleOptions);
+                    } else {
+                        $ps.find('.' + options.minClass).hide(toggleOptions);
+                        $ps.find('.' + options.maxClass).hide(toggleOptions);
+                        $exp.data('filter').show(toggleOptions);
+                    }
+                }
+            };
+            if (typeof commands[command] === 'function') {
+                commands[command]();
+            }
+            return $fields;
+        },
+
+        localDatePicker: function localDatePicker() {
+            $(this).datepicker({
+                showAnim: 'slideDown',
+                dateFormat: 'yy-mm-dd',
+                changeYear: true,
+                changeMonth: true,
+                yearRange: '-10:+0',
+                maxDate: +0
+            });
         }
 
     });
@@ -706,6 +837,8 @@ $(document).ready(function () {
         'html': true,
         'template': '<div class="popover info-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>'
     });
+    $('.filter-helper').filterHelper('init', { toggleDuration: 400, expValue: true, minValue: true, maxValue: true });
+    $('select.styled-select').customSelect();
 });
 
 window.onbeforeunload = function (e) {

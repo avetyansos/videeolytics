@@ -12,9 +12,25 @@ class AnalyticsController extends Controller
 {
 
     public function index(Request $request) {
-        $models = Analytics::all();
+        /** @var Analytics $model */
 
-        $grid = new Datagrid($models, $request->get('f', []));
+        $filter = $request->query('f', []);
+        $filterHelper = $request->query('h_f', []);
+
+        $model = Analytics::getModel();
+
+        $filter['order_by'] = $model->checkColumn($filter['order_by'] ?? 'updated_at', 'updated_at');
+        $filter['order_dir'] = $filter['order_dir'] ?? 'DESC';
+
+        $builder = Analytics::orderBy($filter['order_by'], $filter['order_dir']);
+
+        $builder->addWhereCondition([
+            'dates' => ['startTime'],
+            'strings' => ['userIdentifier', 'platform'],
+        ], $filter, $filterHelper);
+
+        $grid = new Datagrid($builder->get(), $filter);
+
 
         $grid
             ->setColumn('id', 'ID', [
@@ -23,11 +39,13 @@ class AnalyticsController extends Controller
             ])
             ->setColumn('userIdentifier', 'User')
             ->setColumn('startTime', 'Date', [
+                'sortable' => true,
                 'wrapper' => function ($value, $row) {
                     return $row->getData()->startTime->diffForHumans();
                 }
             ])
             ->setColumn('duration', 'Session duration', [
+                'sortable' => true,
                 'wrapper' => function ($value, $row) {
                     $value /= 1000;
                     $minutes = (int) ($value / 60);
@@ -37,6 +55,7 @@ class AnalyticsController extends Controller
             ])
             ->setColumn('deviceModel', 'Device model')
             ->setColumn('platform', 'Operation system', [
+                'sortable' => true,
                 'wrapper' => function ($value, $row) {
                     return $row->platform . ' ' . $row->osVersion;
                 }
@@ -49,7 +68,6 @@ class AnalyticsController extends Controller
             ]);
 
         return view('backoffice.analytics.list', [
-            'models' => $models,
             'grid' => $grid
         ]);
     }

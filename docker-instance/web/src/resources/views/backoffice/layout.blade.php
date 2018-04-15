@@ -17,6 +17,7 @@
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" media="all" href="{{ asset('plugins/fontawesome/css/fontawesome-all.min.css') }}">
+    <link rel="stylesheet" media="all" href="{{ asset('plugins/jquery-ui/jquery-ui.min.css') }}">
     <link rel="stylesheet" media="all" href="{{ asset(mix('css/app.css')) }}">
     <link rel="stylesheet" media="all" href="{{ asset(mix('css/all.css')) }}">
 
@@ -93,6 +94,7 @@
 <script src="{{ asset(mix('js/manifest.js')) }}"></script>
 <script src="{{ asset(mix('js/vendor.js')) }}"></script>
 <script src="{{ asset(mix('js/app.js')) }}"></script>
+<script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 
 @yield('custom-js')
 
